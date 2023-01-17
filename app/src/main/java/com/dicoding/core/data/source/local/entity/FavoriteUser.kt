@@ -1,4 +1,4 @@
-package com.dicoding.model.localstorage
+package com.dicoding.core.data.source.local.entity
 
 import android.os.Parcelable
 import androidx.room.Entity

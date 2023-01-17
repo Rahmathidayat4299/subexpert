@@ -8,8 +8,8 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.adapter.AdapterUser
 import com.dicoding.githubseconds.databinding.ActivityFavoriteUserBinding
-import com.dicoding.model.localstorage.FavoriteUser
-import com.dicoding.model.remote.ItemResult
+import com.dicoding.core.data.source.local.entity.FavoriteUser
+import com.dicoding.core.domain.model.ItemResult
 import com.dicoding.viewmodel.FavUserVm
 
 class FavUserActivity : AppCompatActivity() {

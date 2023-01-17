@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.adapter.AdapterUser
 import com.dicoding.darkmode.SettingApp
 import com.dicoding.githubseconds.databinding.ActivityListUserBinding
-import com.dicoding.model.remote.ItemResult
+import com.dicoding.core.domain.model.ItemResult
 import com.dicoding.viewmodel.ListUserVm
 
 class ListUser : AppCompatActivity() {

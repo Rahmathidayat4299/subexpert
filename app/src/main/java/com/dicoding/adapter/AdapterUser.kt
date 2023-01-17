@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dicoding.githubseconds.databinding.ItemListuserBinding
-import com.dicoding.model.remote.ItemResult
+import com.dicoding.core.domain.model.ItemResult
 
 class AdapterUser : RecyclerView.Adapter<AdapterUser.ListViewHolder>() {
     private var listUser = ArrayList<ItemResult>()

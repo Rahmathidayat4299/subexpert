@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.dicoding.model.remote.ItemResult
-import com.dicoding.model.remote.UserResult
+import com.dicoding.core.domain.model.ItemResult
+import com.dicoding.core.data.source.remote.response.UserResult
 import com.dicoding.retrofit.RetroService
 import retrofit2.Call
 import retrofit2.Callback

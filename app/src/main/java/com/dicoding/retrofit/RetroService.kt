@@ -1,5 +1,6 @@
 package com.dicoding.retrofit
 
+import com.dicoding.core.data.source.remote.network.ApiUser
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import retrofit2.Retrofit
@@ -10,7 +11,7 @@ object RetroService {
 
     private var client = OkHttpClient.Builder().addInterceptor { chain ->
         val newRequest: Request = chain.request().newBuilder()
-            .addHeader("Authorization", "Token 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")
+            .addHeader("Authorization", "Token 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")
             .build()
         chain.proceed(newRequest)
     }.build()

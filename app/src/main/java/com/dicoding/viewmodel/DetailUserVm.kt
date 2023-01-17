@@ -5,10 +5,10 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.dicoding.model.localstorage.FavoriteUser
-import com.dicoding.model.localstorage.FavoriteUserDao
-import com.dicoding.model.localstorage.UserDatabase
-import com.dicoding.model.remote.ModelDet
+import com.dicoding.core.data.source.local.entity.FavoriteUser
+import com.dicoding.core.data.source.local.room.FavoriteUserDao
+import com.dicoding.core.data.source.local.room.UserDatabase
+import com.dicoding.core.data.source.remote.response.ModelDet
 import com.dicoding.retrofit.RetroService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
