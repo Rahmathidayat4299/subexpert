@@ -4,14 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.dicoding.core.data.source.local.entity.FavoriteUser
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FavoriteUserDao {
-    @Insert
-    fun addToFavorite(favoriteUser: FavoriteUser)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun addToFavorite(favoriteUser: FavoriteUser?)
 
     @Query("SELECT * FROM favorite_user")
     fun getFavoriteUser(): Flow<List<FavoriteUser>>

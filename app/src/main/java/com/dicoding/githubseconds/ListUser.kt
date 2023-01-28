@@ -6,7 +6,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.activity.viewModels
+import android.widget.Toast
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,11 +15,13 @@ import com.dicoding.adapter.AdapterUser
 import com.dicoding.darkmode.SettingApp
 import com.dicoding.githubseconds.databinding.ActivityListUserBinding
 import com.dicoding.core.domain.model.ItemResult
+import com.dicoding.util.Resource
 import com.dicoding.viewmodel.ListUserVm
+
 
 class ListUser : AppCompatActivity() {
     private lateinit var binding: ActivityListUserBinding
-    private val viewModel by viewModels<ListUserVm>()
+    private val viewModel : ListUserVm by viewModel()
     private lateinit var adapterUser: AdapterUser
 
     @SuppressLint("NotifyDataSetChanged")
@@ -26,10 +29,13 @@ class ListUser : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityListUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        adapterUser = AdapterUser()
+        val adapterUser = AdapterUser(arrayListOf())
         adapterUser.notifyDataSetChanged()
 
-
+        binding.rcvUser.apply {
+            adapter = adapterUser
+            layoutManager = LinearLayoutManager(this@ListUser, LinearLayoutManager.VERTICAL, false)
+        }
         binding.search.apply {
 
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -37,38 +43,53 @@ class ListUser : AppCompatActivity() {
                     if (query?.isNotEmpty()!!
                     ) {
                         viewLoading(true)
-                        viewModel.getUser(query).observe(this@ListUser) {
-                            if (it != null) {
-
-                                adapterUser.addList(it)
-                                viewLoading(false)
-                                showData()
-                            }
-                        }
+                        viewModel.searchUser(query)
+                        showData()
                     }
-
                     return true
                 }
 
 
                 override fun onQueryTextChange(newText: String?): Boolean = false
             })
+            getListUser()
 
         }
 
         adapterUser.setOnItemClickCallback(object : AdapterUser.OnItemClickCallback {
             override fun onItemClik(data: ItemResult) {
-                Intent(this@ListUser, DetailUser::class.java).also {
-                    it.putExtra(DetailUser.USERNAME_GITHUB, data.login)
-                    it.putExtra(DetailUser.EXTRA_ID, data.id)
-                    it.putExtra(DetailUser.EXTRA_URL_AVATAR, data.avatarUrl)
-                    it.putExtra(DetailUser.EXTRA_URL, data.htmlUrl)
-                    startActivity(it)
-                }
+//                Intent(this@ListUser, DetailUser::class.java).also {
+//                    it.putExtra(DetailUser.USERNAME_GITHUB, data.login)
+//                    it.putExtra(DetailUser.EXTRA_ID, data.id)
+//                    it.putExtra(DetailUser.EXTRA_URL_AVATAR, data.avatarUrl)
+//                    it.putExtra(DetailUser.EXTRA_URL, data.url)
+//                    startActivity(it)
+//                }
             }
         })
 
 
+    }
+
+    private fun getListUser() {
+        viewModel.user.observe(this) {
+            if (it != null) {
+                when (it) {
+                    is Resource.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        it.data?.let { data -> adapterUser.addList(data) }
+//                        showData()
+                    }
+                    is Resource.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+
+                    }
+                    is Resource.Error -> {
+                        Toast.makeText(this, "ListUser empty list", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

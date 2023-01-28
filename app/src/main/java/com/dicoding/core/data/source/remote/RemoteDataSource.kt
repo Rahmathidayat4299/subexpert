@@ -32,7 +32,7 @@ class RemoteDataSource(private val apiUser: ApiUser) {
             }
         }.flowOn(Dispatchers.IO)
 
-    suspend fun getFollowing(username: String): Flow<ApiResponse<List<ItemResult>>> =
+    suspend fun getFollowing(username: String): Flow<ApiResponse<List<ModelDet>>> =
         flow {
 
             try {
@@ -45,7 +45,7 @@ class RemoteDataSource(private val apiUser: ApiUser) {
 
         }.flowOn(Dispatchers.IO)
 
-    suspend fun getFollower(username: String): Flow<ApiResponse<List<ItemResult>>> =
+    suspend fun getFollower(username: String): Flow<ApiResponse<List<ModelDet>>> =
         flow {
             try {
                 val userFollowing = apiUser.pathFollow(username, "follower")

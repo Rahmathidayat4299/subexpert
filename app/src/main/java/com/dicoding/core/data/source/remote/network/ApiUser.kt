@@ -23,5 +23,5 @@ interface ApiUser {
     @GET("users/{username}/{type}")
     fun pathFollow(
         @Path("username") username: String,@Path("type") type: String,
-    ): List<ItemResult>
+    ): List<ModelDet>
 }

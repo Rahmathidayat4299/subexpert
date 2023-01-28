@@ -10,6 +10,7 @@ import com.dicoding.core.domain.repository.IRepository
 import com.dicoding.util.DataMapper
 import com.dicoding.util.Resource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 /**
  * Created by Rahmat Hidayat on 17/01/2023.
@@ -32,30 +33,63 @@ class RepositoryUser(
     }
 
     override fun getAllFollowers(username: String): Flow<Resource<List<ItemResult>>> {
-        TODO("Not yet implemented")
+       return object :NetworkOnlyResource<List<ItemResult>,List<ModelDet>>(){
+           override fun loadFromNetwork(data: List<ModelDet>): Flow<List<ItemResult>> {
+               return DataMapper.mapResponsesToDomain(data)
+           }
+
+           override suspend fun createCall(): Flow<ApiResponse<List<ModelDet>>> {
+               return remoteDataSource.getFollower(username)
+           }
+
+       }.asFlow()
     }
 
     override fun getAllFollowing(username: String): Flow<Resource<List<ItemResult>>> {
-        TODO("Not yet implemented")
+       return object : NetworkOnlyResource<List<ItemResult>,List<ModelDet>>(){
+           override fun loadFromNetwork(data: List<ModelDet>): Flow<List<ItemResult>> {
+               return DataMapper.mapResponsesToDomain(data)
+           }
+
+           override suspend fun createCall(): Flow<ApiResponse<List<ModelDet>>> {
+               return remoteDataSource.getFollowing(username)
+           }
+
+       }.asFlow()
     }
 
     override fun getDetailUser(username: String): Flow<Resource<ItemResult>> {
-        TODO("Not yet implemented")
+        return object : NetworkOnlyResource<ItemResult, ModelDet>(){
+            override fun loadFromNetwork(data: ModelDet): Flow<ItemResult> {
+                return DataMapper.mapResponseToDomain(data)
+            }
+
+            override suspend fun createCall(): Flow<ApiResponse<ModelDet>> {
+                return remoteDataSource.getUserDetail(username)
+            }
+
+        }.asFlow()
     }
 
     override fun getFavoriteUser(): Flow<List<ItemResult>> {
-        TODO("Not yet implemented")
+        return localDataSource.getFavoriteUser().map {
+            DataMapper.mapEntitiesToDomain(it)
+        }
     }
 
     override fun getDetailState(username: String): Flow<ItemResult>? {
-        TODO("Not yet implemented")
+        return localDataSource.getDetailState(username)?.map {
+            DataMapper.mapEntityToDomain(it)
+        }
     }
 
     override suspend fun insertUser(user: ItemResult) {
-        TODO("Not yet implemented")
+        val userDomain = DataMapper.mapDomainToEntity(user)
+        return localDataSource.insertUser(userDomain)
     }
 
     override suspend fun deleteUser(user: ItemResult): Int {
-        TODO("Not yet implemented")
+        val userDomain = DataMapper.mapDomainToEntity(user)
+        return localDataSource.deleteUser(userDomain)
     }
 }

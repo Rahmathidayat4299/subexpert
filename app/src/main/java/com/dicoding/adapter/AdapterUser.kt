@@ -8,22 +8,24 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dicoding.githubseconds.databinding.ItemListuserBinding
 import com.dicoding.core.domain.model.ItemResult
+import com.dicoding.util.Resource
 
-class AdapterUser : RecyclerView.Adapter<AdapterUser.ListViewHolder>() {
-    private var listUser = ArrayList<ItemResult>()
+class AdapterUser(private val user: ArrayList<ItemResult>) : RecyclerView.Adapter<AdapterUser.ListViewHolder>() {
+//    private var listUser = ArrayList<ItemResult>()
     private var onItemClickCallback: OnItemClickCallback? = null
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun addList(item: ArrayList<ItemResult>) {
-        listUser.apply {
+//    @SuppressLint("NotifyDataSetChanged")
+    fun addList(item: List<ItemResult>?) {
+        user.apply {
             clear()
-            addAll(item)
-            notifyDataSetChanged()
+            item?.let { addAll(it) }
+
         }
+        notifyDataSetChanged()
     }
 
     inner class ListViewHolder(private val binding: ItemListuserBinding) :
@@ -50,10 +52,10 @@ class AdapterUser : RecyclerView.Adapter<AdapterUser.ListViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        holder.bind(listUser[position])
+        holder.bind(user[position])
     }
 
-    override fun getItemCount() = listUser.size
+    override fun getItemCount() = user.size
 
     interface OnItemClickCallback {
         fun onItemClik(data: ItemResult)
